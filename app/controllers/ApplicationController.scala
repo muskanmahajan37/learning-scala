@@ -32,4 +32,9 @@ class ApplicationController extends Controller {
     }
   }
 
+  def getUser(id: Long) = Action.async { implicit request =>
+    UserService.getUser(id) map { user =>
+      Ok(views.html.profile(user))
+    }
+  }
 }

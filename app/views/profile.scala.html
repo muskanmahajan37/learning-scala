@@ -1,0 +1,26 @@
+@(user : Option[models.User])(implicit request: RequestHeader)
+@main() {
+    <div class="user-display" >
+        <fieldset>
+            <table cellspacing="20">
+                <tr>
+                    <th>userid</th>
+                    <th>firstname</th>
+                    <th>lastname</th>
+                    <th>mobile</th>
+                    <th>email</th>
+                </tr>
+                @for(userInfo <- user){
+                <tr>
+                    <td>@userInfo.id</td>
+                    <td>@userInfo.firstName</td>
+                    <td>@userInfo.lastName</td>
+                    <td>@userInfo.mobile</td>
+                    <td>@userInfo.email</td>
+                </tr>
+                }
+            </table>
+        </fieldset>
+    </div>
+
+}
