@@ -38,7 +38,12 @@ class ApiController extends Controller {
   def createUser = Action(parse.json) { implicit request =>
     println(request.body)
     request.body.validate[UserFormData] match {
-      case JsSuccess(user, _) => Ok(Json.obj("post" -> "successful"))
+      case JsSuccess(user, _) =>
+        val newUser = User(0, user.firstName, user.lastName, user.mobile, user.email)
+        UserService.addUser(newUser).map(res =>
+          println(res)
+        )
+        Ok("")
       case JsError(errors) =>
         println(errors)
         BadRequest

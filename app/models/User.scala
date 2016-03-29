@@ -47,7 +47,7 @@ object Users {
   val users = TableQuery[UserTableDef]
 
   def add(user: User): Future[String] = {
-    dbConfig.db.run(users += user).map(res => "User successfully added").recover {
+    dbConfig.db.run(users += user).map(res => user.toString()).recover {
       case ex: Exception => ex.getCause.getMessage
     }
   }
