@@ -11,10 +11,10 @@ import services.UserService
 class ApiController extends Controller {
 
   implicit val readsUser: Reads[UserFormData] = (
-      ((__ \ "firstName").read[String]) and
-      ((__ \ "lastName").read[String]) and
-      ((__ \ "mobile").read[Long]) and
-      ((__ \ "email").read[String])
+      (__ \ "firstName").read[String] ~
+      (__ \ "lastName").read[String] ~
+      (__ \ "mobile").read[Long] ~
+      (__ \ "email").read[String]
     ) (UserFormData.apply _)
 
   implicit val writeUser = Writes[User] {
@@ -36,9 +36,12 @@ class ApiController extends Controller {
   }
 
   def createUser = Action(parse.json) { implicit request =>
+    println(request.body)
     request.body.validate[UserFormData] match {
       case JsSuccess(user, _) => Ok(Json.obj("post" -> "successful"))
-      case JsError(errors) => BadRequest
+      case JsError(errors) =>
+        println(errors)
+        BadRequest
     }
   }
 
