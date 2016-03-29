@@ -1,14 +1,23 @@
 package controllers
 
-import models.User
+import models.{User, UserFormData}
 import play.api.libs.json._
 import play.api.mvc.{Action, Controller}
 import play.api.libs.concurrent.Execution.Implicits._
+import play.api.libs.json.{Reads, __}
+import play.api.libs.functional.syntax._
 import services.UserService
 
 class ApiController extends Controller {
 
-  implicit val writesItem = Writes[User] {
+  implicit val readsUser: Reads[UserFormData] = (
+      ((__ \ "firstName").read[String]) and
+      ((__ \ "lastName").read[String]) and
+      ((__ \ "mobile").read[Long]) and
+      ((__ \ "email").read[String])
+    ) (UserFormData.apply _)
+
+  implicit val writeUser = Writes[User] {
     case User(id, firstName, lastName, mobile, email) =>
       Json.obj(
         "id" -> id,
@@ -25,4 +34,12 @@ class ApiController extends Controller {
       case Some(user) => Ok(Json.toJson(user))
     }
   }
+
+  def createUser = Action(parse.json) { implicit request =>
+    request.body.validate[UserFormData] match {
+      case JsSuccess(user, _) => Ok(Json.obj("post" -> "successful"))
+      case JsError(errors) => BadRequest
+    }
+  }
+
 }

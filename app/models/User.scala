@@ -4,9 +4,12 @@ import play.api.Play
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.db.slick.DatabaseConfigProvider
+import play.api.libs.json._
+
 import scala.concurrent.Future
 import slick.driver.JdbcProfile
 import slick.driver.MySQLDriver.api._
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 case class User(id: Long, firstName: String, lastName: String, mobile: Long, email: String)
